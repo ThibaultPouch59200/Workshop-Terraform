@@ -1,0 +1,32 @@
+services:
+  sqlite:
+    image: nouchka/sqlite3:${SQLITE_VERSION}
+    container_name: workshop-sqlite
+    volumes:
+      - sqlite-data:/data
+    environment:
+      - SQLITE_DATABASE=workshop.db
+    networks:
+      - workshop-network
+    restart: unless-stopped
+    command: tail -f /dev/null
+    healthcheck:
+      test: ["CMD", "sqlite3", "/data/workshop.db", "SELECT 1;"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.terraform.workshop=sqlite"
+      - "com.terraform.workshop.role=database"
+
+volumes:
+  sqlite-data:
+    driver: local
+
+networks:
+  workshop-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
