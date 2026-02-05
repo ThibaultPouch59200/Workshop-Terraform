@@ -77,15 +77,15 @@ This workshop builds a simple three-tier web application architecture:
 ## 📋 Prerequisites
 
 ### System Requirements
-- Portainer instance running and accessible
-- Portainer admin/user credentials with API access enabled
-- Access to Portainer's Docker API
+- Docker Desktop (Windows/Mac) or Docker Engine (Linux) installed and running
+- At least 4GB of RAM available for Docker
 - Basic understanding of Docker concepts (containers, images, networking)
 
 ### Software Requirements
-- Terraform (version 1.0+) installed on your local machine
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
+  - [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
+- **Terraform** (version 1.0+) installed on your local machine
   - [Download Terraform](https://www.terraform.io/downloads.html)
-- Docker CLI (optional, for manual verification)
 - A text editor or IDE (VS Code recommended)
 
 ### Knowledge Requirements
@@ -117,108 +117,81 @@ Verify installation:
 terraform version
 ```
 
-### Step 2: Prepare Your Environment
+### Step 2: Set Up Local Portainer
 
-1. **Gather Portainer Information:**
-   - Portainer URL/IP address
-   - Admin username and password (or API token)
-   - Portainer environment ID
+Portainer will be your local Docker management platform for this workshop.
 
-2. **Clone or Navigate to Workshop Repository:**
+1. **Start Portainer Container:**
+   ```bash
+   docker run -d \
+     -p 9443:9443 \
+     -p 8000:8000 \
+     --name portainer \
+     --restart=always \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v portainer_data:/data \
+     portainer/portainer-ce:latest
+   ```
+
+2. **Access Portainer Web Interface:**
+   - Open your browser to: `https://localhost:9443`
+   - You may see a security warning (self-signed certificate) - accept it
+   - Create your admin account on first login:
+     - Username: `admin` (or your choice)
+     - Password: Choose a secure password
+   - On the next screen, select **Local** to manage your local Docker environment
+
+3. **Generate Portainer API Key:**
+   - Once logged in, go to: **User settings** (click your username) → **Access tokens**
+   - Click **+ Add access token**
+   - Description: `Terraform Workshop`
+   - Click **Add token**
+   - **⚠️ IMPORTANT:** Copy the token immediately (it won't be shown again)
+   - It will look like: `ptr_xxxxxxxxxxxxxxxxxxxxxxxx`
+
+4. **Verify Environment ID:**
+   - In Portainer, go to **Environments**
+   - Note the ID of your local environment (usually `2` for local Docker)
+   - Or hover over the environment name and check the URL
+
+### Step 3: Prepare Your Workspace
+
+1. **Clone or Navigate to Workshop Repository:**
    ```bash
    cd Workshop-Terraform
    ```
 
+2. **Create Terraform Configuration File:**
+
+   Create a `terraform.tfvars` file in the root directory with your Portainer details:
+
+   ```bash
+   cat > terraform.tfvars << EOF
+   portainer_url              = "https://localhost:9443"
+   portainer_api_key          = "ptr_YOUR_TOKEN_HERE"
+   portainer_skip_ssl_verify  = true
+   EOF
+   ```
+
+   Replace `ptr_YOUR_TOKEN_HERE` with the API token you copied in Step 2.
+
+   **⚠️ Security Note:** Never commit `terraform.tfvars` to version control! It's already in `.gitignore`.
+
 3. **Review the Project Structure:**
    ```
    Workshop-Terraform/
-   ├── README.md                    # This file (workshop guide)
-   ├── .gitignore                   # Git ignore file
-   ├── docker/                      # Docker configurations
-   │   ├── README.md                # Docker documentation
-   │   ├── build.sh                 # Build script for web app
-   │   ├── docker-compose-full.yml  # Complete stack deployment
-   │   ├── webapp/                  # Web application
-   │   │   ├── Dockerfile           # Image build configuration
-   │   │   ├── app.py               # Flask application
-   │   │   ├── requirements.txt     # Python dependencies
-   │   │   └── README.md            # Web app docs
-   │   ├── nginx/                   # Nginx reverse proxy
-   │   │   ├── docker-compose.yml   # Nginx stack
-   │   │   ├── nginx.conf           # Nginx config
-   │   │   └── README.md            # Nginx docs
-   │   └── sqlite/                  # SQLite database
-   │       ├── docker-compose.yml   # SQLite stack
-   │       ├── init.sql             # Database initialization
-   │       └── README.md            # SQLite docs
-   └── terraform/                   # Terraform configurations (to be created)
-       ├── main.tf                  # Main configuration
-       ├── variables.tf             # Variable declarations
-       ├── outputs.tf               # Output definitions
-       └── docker_provider.tf       # Docker provider setup
+   ├── README.md              # This file (workshop guide)
+   ├── exercises.md           # Step-by-step exercises
+   ├── .gitignore            # Git ignore file
+   ├── provider.tf           # Portainer provider configuration
+   ├── variables.tf          # Variable declarations
+   ├── entrypoint.tf         # Main entry point
+   ├── terraform.tfvars      # Your local config (not in git)
+   └── stacks/               # Individual stack configurations
+       ├── nginx/            # Nginx reverse proxy
+       ├── app/              # Web application
+       └── sqlite/           # SQLite database
    ```
-
-### Step 3: Build the Web Application Image
-
-Before starting the Terraform exercises, you need to build the Docker image for the web application.
-
-**Option 1: Using the Build Script (Recommended)**
-```bash
-cd docker
-./build.sh
-```
-
-**Option 2: Manual Build**
-```bash
-cd docker/webapp
-docker build -t workshop-webapp:latest .
-```
-
-**Verify the Image:**
-```bash
-docker images | grep workshop-webapp
-```
-
-### Step 4: Test the Application Locally (Optional)
-
-You can test the complete stack locally before deploying via Terraform:
-
-```bash
-# From the docker directory
-cd docker
-docker-compose -f docker-compose-full.yml up -d
-
-# Test the application
-curl http://localhost
-curl http://localhost/health
-curl http://localhost/api/info
-
-# Clean up
-docker-compose -f docker-compose-full.yml down
-```
-
-### Step 5: Prepare for Portainer Deployment
-
-**Push Image to Portainer:**
-
-1. **Option A: Save and Upload**
-   ```bash
-   docker save workshop-webapp:latest | gzip > workshop-webapp.tar.gz
-   # Upload via Portainer UI: Images → Import
-   ```
-
-2. **Option B: Use a Registry**
-   ```bash
-   # Tag for your registry
-   docker tag workshop-webapp:latest your-registry/workshop-webapp:latest
-
-   # Push to registry
-   docker push your-registry/workshop-webapp:latest
-   ```
-
-3. **Option C: Use Portainer's Local Build** (if supported)
-   - Upload the Dockerfile and app files
-   - Build directly in Portainer
 
 ## 📝 Workshop Exercises
 
