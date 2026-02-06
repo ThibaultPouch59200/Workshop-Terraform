@@ -1,6 +1,6 @@
 # Terraform Workshop: Infrastructure as Code with Portainer
 
-## 📚 Workshop Overview
+## Workshop Overview
 
 Welcome to the **Terraform Workshop**! This hands-on learning experience will guide you through the fundamentals of Terraform by building a simple yet practical infrastructure. You'll learn how to use **Infrastructure as Code (IaC)** principles to deploy a containerized web application stack on a Portainer-hosted Docker environment.
 
@@ -12,7 +12,7 @@ By the end of this workshop, you'll understand how to:
 
 ---
 
-## 🎯 Learning Objectives
+## Learning Objectives
 
 After completing this workshop, you should be able to:
 
@@ -42,7 +42,7 @@ After completing this workshop, you should be able to:
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 This workshop builds a simple three-tier web application architecture:
 
@@ -74,7 +74,7 @@ This workshop builds a simple three-tier web application architecture:
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### System Requirements
 - Docker Desktop (Windows/Mac) or Docker Engine (Linux) installed and running
@@ -95,29 +95,9 @@ This workshop builds a simple three-tier web application architecture:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-### Step 1: Install Terraform
-**On macOS:**
-```bash
-# Using Homebrew
-brew tap hashicorp/tap
-brew install hashicorp/tap/terraform
-```
-
-**On Linux:**
-```bash
-wget https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
-unzip terraform_1.5.0_linux_amd64.zip
-sudo mv terraform /usr/local/bin/
-```
-
-Verify installation:
-```bash
-terraform version
-```
-
-### Step 2: Set Up Local Portainer
+### Step 1: Set Up Local Portainer
 
 Portainer will be your local Docker management platform for this workshop.
 
@@ -139,6 +119,7 @@ Portainer will be your local Docker management platform for this workshop.
    - Create your admin account on first login:
      - Username: `admin` (or your choice)
      - Password: Choose a secure password
+   - When your are on the wizard to select an environment, choose **Get Started** (the default)
    - On the next screen, select **Local** to manage your local Docker environment
 
 3. **Generate Portainer API Key:**
@@ -151,10 +132,10 @@ Portainer will be your local Docker management platform for this workshop.
 
 4. **Verify Environment ID:**
    - In Portainer, go to **Environments**
-   - Note the ID of your local environment (usually `2` for local Docker)
-   - Or hover over the environment name and check the URL
+   - Note the ID of your local environment (usually `3` for local Docker)
+   - Or hover over the environment name and check the URL `/endpoints/3` (the number is the ID)
 
-### Step 3: Prepare Your Workspace
+### Step 2: Prepare Your Workspace
 
 1. **Clone or Navigate to Workshop Repository:**
    ```bash
@@ -193,13 +174,13 @@ Portainer will be your local Docker management platform for this workshop.
        └── sqlite/           # SQLite database
    ```
 
-## 📝 Workshop Exercises
+## Workshop Exercises
 
 Now that you have the environment set up and the web application image built, you're ready to start deploying with Terraform! Follow the exercises in [`exercises.md`](exercises.md) to deploy each component step-by-step and understand how Terraform manages your infrastructure.
 
 ---
 
-## 🔑 Key Terraform Concepts
+## Key Terraform Concepts
 
 ### State Files
 - `terraform.tfstate`: Tracks current infrastructure state
@@ -209,7 +190,7 @@ Now that you have the environment set up and the web application image built, yo
 
 ### Providers
 - Terraform plugins that interact with APIs (Docker, AWS, Azure, etc.)
-- Configured in `docker_provider.tf`
+- Configured in `provider.tf`
 - Require authentication credentials
 
 ### Resources
@@ -250,18 +231,13 @@ terraform refresh             # Update state from real infrastructure
    *.tfstate.backup
    ```
 
-3. **Use Terraform Cloud for State:**
-   - Remote state with encryption
-   - Team collaboration features
-   - Better security than local state
-
-4. **Rotate Credentials Regularly:**
+3. **Rotate Credentials Regularly:**
    - Change Portainer API tokens periodically
    - Update passwords in a secure manner
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -296,7 +272,7 @@ TF_LOG=TRACE terraform apply
 
 ---
 
-## 📚 Further Learning
+## Further Learning
 
 ### Recommended Topics to Explore:
 1. **Terraform Modules** - Reusable configuration blocks
@@ -313,7 +289,7 @@ TF_LOG=TRACE terraform apply
 
 ---
 
-## 💡 Tips & Tricks
+## Tips & Tricks
 
 ### Useful Commands:
 ```bash
@@ -346,7 +322,7 @@ terraform state list | grep docker_ | wc -l
 
 ---
 
-## 🎓 Workshop Completion Checklist
+## Workshop Completion Checklist
 
 - [ ] Terraform installed and verified
 - [ ] Portainer connection configured
@@ -358,7 +334,7 @@ terraform state list | grep docker_ | wc -l
 - [ ] Terraform state properly managed
 - [ ] `.gitignore` configured for sensitive files
 
-## 🚀 Next Steps After Workshop
+## Next Steps After Workshop
 
 Congratulations on completing the Terraform workshop! Here are suggested next steps:
 
