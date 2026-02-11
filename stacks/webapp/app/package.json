@@ -1,0 +1,13 @@
+{
+  "name": "terraform-workshop-webapp",
+  "version": "1.0.0",
+  "description": "Simple web application for Terraform workshop",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "better-sqlite3": "^9.2.2"
+  }
+}

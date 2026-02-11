@@ -1,0 +1,32 @@
+services:
+  webapp:
+    image: workshop-webapp:${WEBAPP_VERSION}
+    container_name: workshop-webapp
+    ports:
+      - "3000:3000"
+    volumes:
+      - sqlite_sqlite-data:/data  # Mount SQLite data volume with write access
+    environment:
+      - PORT=3000
+      - DB_PATH=/data/workshop.db
+      - NODE_ENV=production
+    networks:
+      - workshop-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.terraform.workshop=webapp"
+      - "com.terraform.workshop.role=application"
+
+volumes:
+  sqlite_sqlite-data:
+    external: true
+
+networks:
+  workshop-network:
+    external: true
