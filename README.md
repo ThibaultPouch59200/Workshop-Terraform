@@ -85,7 +85,7 @@ This workshop builds a simple three-tier web application architecture:
 - **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
   - [Download Docker Desktop](https://www.docker.com/products/docker-desktop)
 - **Terraform** (version 1.0+) installed on your local machine
-  - [Download Terraform](https://www.terraform.io/downloads.html)
+  - [Download Terraform](https://developer.hashicorp.com/terraform/tutorials/docker-get-started/install-cli)
 - A text editor or IDE (VS Code recommended)
 
 ### Knowledge Requirements
@@ -157,6 +157,21 @@ Portainer will be your local Docker management platform for this workshop.
    Replace `ptr_YOUR_TOKEN_HERE` with the API token you copied in Step 2.
 
    **⚠️ Security Note:** Never commit `terraform.tfvars` to version control! It's already in `.gitignore`.
+
+   **Using a Custom tfvars File:**
+
+   After you create the `terraform.tfvars` file, you can specify it explicitly when running Terraform commands:
+
+   ```bash
+   terraform plan -var-file="terraform.tfvars"
+   terraform apply -var-file="terraform.tfvars"
+   ```
+
+   or set the environment variable to automatically use it:
+
+   ```bash
+   export TF_VAR_file="terraform.tfvars"
+   ```
 
 3. **Review the Project Structure:**
    ```

@@ -35,3 +35,24 @@ module "sqlite" {
   sqlite_image                       = var.sqlite_image
   sqlite_service_name                = var.sqlite_service_name
 }
+
+module "webapp" {
+  source = "./stacks/webapp"
+
+  portainer_url                     = var.portainer_url
+  portainer_api_key                 = var.portainer_api_key
+  portainer_skip_ssl_verify         = var.portainer_skip_ssl_verify
+
+  stack_deployment_type             = var.stack_deployment_type
+  stack_method                      = var.stack_method
+  stack_endpoint_id                 = var.stack_endpoint_id
+
+  webapp_stack_name                 = var.webapp_stack_name
+  webapp_env_name                   = var.webapp_env_name
+  webapp_env_value                  = var.webapp_env_value
+  webapp_env_new_version_value      = var.webapp_env_new_version_value
+  webapp_image                      = var.webapp_image
+  webapp_service_name               = var.webapp_service_name
+
+  depends_on = [ module.sqlite ]
+}
