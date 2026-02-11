@@ -4,13 +4,13 @@ services:
     container_name: workshop-sqlite
     volumes:
       - sqlite-data:/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro  # Mount init script as read-only
     environment:
       - SQLITE_DATABASE=workshop.db
     networks:
       - workshop-network
     restart: unless-stopped
-    command: tail -f /dev/null
+    entrypoint: ["/bin/sh"]
+    command: ["-c", "while true; do sleep 3600; done"]
     healthcheck:
       test: ["CMD", "sqlite3", "/data/workshop.db", "SELECT 1;"]
       interval: 30s
@@ -27,7 +27,4 @@ volumes:
 
 networks:
   workshop-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
+    external: true
