@@ -4,8 +4,6 @@
 
 📚 **Reference:** Keep `PORTAINER_PROVIDER_REFERENCE.md` open for resource documentation.
 
----
-
 ## Understanding the Web Application
 
 **What is it?**
@@ -20,8 +18,6 @@ A Node.js/Express application that:
 ```
 Browser → Nginx (port 80) → Web App (port 3000) → SQLite Database
 ```
-
----
 
 ## Key Differences from Previous Exercises
 
@@ -64,15 +60,11 @@ docker network ls | grep workshop
 
 All three must be ready before deploying the webapp!
 
----
-
 ## Step 2: Create the File
 
 ```bash
 touch stacks/webapp/webapp.tf
 ```
-
----
 
 ## Step 3: Create the Stack
 
@@ -109,8 +101,6 @@ resource "portainer_stack" "webapp_stack" {
 }
 ```
 </details>
-
----
 
 ## Step 4: Deploy the Service
 
@@ -149,8 +139,6 @@ resource "portainer_deploy" "webapp_deploy" {
 - `update_revision = false`: Don't trigger redeployment on version changes
 - `wait = 15`: Give the webapp time to start and connect to the database
 
----
-
 ## Step 5: Validate and Deploy
 
 ```bash
@@ -158,8 +146,6 @@ terraform validate
 terraform plan -target=module.webapp
 terraform apply -target=module.webapp
 ```
-
----
 
 ## Step 6: Verify the Deployment
 
@@ -199,8 +185,6 @@ You should see:
 - Ability to add new visitors
 - Real-time statistics
 
----
-
 ## Step 7: Test Full Stack Integration
 
 ### Add a Visitor via API
@@ -237,12 +221,12 @@ You should see your new visitor in the database!
 │   Browser   │─────▶│    Nginx     │─────▶│   WebApp    │
 │             │      │   (port 80)  │      │  (port 3000)│
 └─────────────┘      └──────────────┘      └──────┬──────┘
-                                                   │
-                                                   │
-                                            ┌──────▼──────┐
-                                            │   SQLite    │
-                                            │  (database) │
-                                            └─────────────┘
+                                                  │
+                                                  │
+                                           ┌──────▼──────┐
+                                           │   SQLite    │
+                                           │  (database) │
+                                           └─────────────┘
 ```
 
 ### Network Configuration

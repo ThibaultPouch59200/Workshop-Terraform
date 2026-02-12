@@ -4,8 +4,6 @@
 
 📚 **Reference:** Keep `PORTAINER_PROVIDER_REFERENCE.md` open for resource documentation.
 
----
-
 ## Understanding SQLite Stack
 
 **Key Differences from Nginx:**
@@ -29,8 +27,6 @@ All of this happens on container startup!
 touch stacks/sqlite/sqlite.tf
 ```
 
----
-
 ## Step 2: Pull the SQLite Image
 
 **Your task:** Create a `portainer_docker_image` resource for SQLite.
@@ -50,8 +46,6 @@ resource "portainer_docker_image" "sqlite_pull" {
 }
 ```
 </details>
-
----
 
 ## Step 3: Create the Stack
 
@@ -87,8 +81,6 @@ resource "portainer_stack" "sqlite_stack" {
 ```
 </details>
 
----
-
 ## Step 4: Deploy the Service
 
 **Your task:** Create the deploy resource with dependencies.
@@ -118,8 +110,6 @@ resource "portainer_deploy" "sqlite_deploy" {
 
 **Note:** We removed the `portainer_container_exec` for database initialization because it's now embedded in the `sqlite.yml` file! Check the compose file to see how initialization is done on startup.
 
----
-
 ## Step 5: Validate and Deploy
 
 ```bash
@@ -127,8 +117,6 @@ terraform validate
 terraform plan -target=module.sqlite
 terraform apply -target=module.sqlite
 ```
-
----
 
 ## Step 6: Verify Database
 
@@ -157,28 +145,6 @@ You should see:
 - Sample data (Alice, Bob, Charlie)
 
 **All created automatically from the embedded initialization script!**
-
----
-
-## Understanding Persistence
-
-### Test Data Persistence
-
-```bash
-# Add your own data
-docker exec workshop-sqlite sqlite3 /data/workshop.db \
-  "INSERT INTO visitors (name) VALUES ('Your Name');"
-
-# Restart container
-docker restart workshop-sqlite
-
-# Wait a few seconds, then check data is still there
-sleep 5
-docker exec workshop-sqlite sqlite3 /data/workshop.db \
-  "SELECT * FROM visitors;"
-```
-
-Your data persists because of the Docker volume defined in `sqlite.yml`!
 
 ---
 

@@ -4,8 +4,6 @@
 
 📚 **Reference:** Keep `PORTAINER_PROVIDER_REFERENCE.md` open for detailed resource documentation.
 
----
-
 ## Understanding the Goal
 
 **What we're building:**
@@ -28,8 +26,6 @@ touch stacks/nginx/nginx.tf
 
 Open it in your editor and prepare to build it step by step.
 
----
-
 ## Step 2: Pull the Docker Image
 
 **Your task:** Create a `portainer_docker_image` resource.
@@ -49,8 +45,6 @@ resource "portainer_docker_image" "pull" {
 }
 ```
 </details>
-
----
 
 ## Step 3: Create the Stack
 
@@ -86,8 +80,6 @@ resource "portainer_stack" "standalone_file" {
 ```
 </details>
 
----
-
 ## Step 4: Deploy the Service
 
 **Your task:** Create a `portainer_deploy` resource with proper dependencies.
@@ -117,8 +109,6 @@ resource "portainer_deploy" "deploy" {
 ```
 </details>
 
----
-
 ## Step 5: Validate Configuration
 
 ```bash
@@ -126,8 +116,6 @@ terraform validate
 ```
 
 If successful, you're ready to deploy!
-
----
 
 ## Step 6: Deploy and Test
 

@@ -37,8 +37,6 @@ This command:
 - How does Terraform track state?
 - What is the purpose of modules in Terraform?
 
----
-
 ## Part 2: Configure Local Portainer Connection
 
 **Objective:** Set up authenticated connection to your local Portainer instance
@@ -101,8 +99,6 @@ terraform validate
 
 If successful, you'll see: "Success! The configuration is valid."
 
----
-
 ## Part 3: Build the WebApp Docker Image
 
 **Objective:** Build the custom web application image that we'll deploy
@@ -126,8 +122,6 @@ docker images | grep workshop-webapp
 You should see the newly built image in the list.
 
 **Why do this?** The webapp image isn't available on Docker Hub - it's a custom application. We build it locally, and Terraform will use this local image during deployment.
-
----
 
 ## Part 4: Create Docker Network
 

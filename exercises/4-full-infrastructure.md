@@ -122,7 +122,7 @@ docker exec workshop-sqlite sqlite3 /data/workshop.db \
 ```
 sqlite ─────▶ webapp
                │
-nginx ────────┘
+nginx ─────────┘
 ```
 
 - Webapp depends on sqlite (needs database)
